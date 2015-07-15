@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This extension contains improvements to the original extension "Simple Configurable Products" by Organic Internet
+ * It cand be found at http://www.magentocommerce.com/magento-connect/simple-configurable-products.html
+ *
+ * All the modifications are here: https://github.com/Ceicom/Magento-Simple-Configurable-Products
+ */
+-->
+<config>
+  <modules>
+    <OrganicInternet_SimpleConfigurableProducts>
+      <active>true</active>
+      <codePool>community</codePool>
+    </OrganicInternet_SimpleConfigurableProducts>
+  </modules>
+</config>
