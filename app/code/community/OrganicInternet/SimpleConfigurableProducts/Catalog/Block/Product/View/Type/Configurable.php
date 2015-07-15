@@ -69,7 +69,7 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Block_Product_View_Type
         } else {
             $config['priceFromLabel'] = $this->__('');
         }
-        $config['ajaxBaseUrl'] = Mage::getUrl('oi/ajax/');
+        $config['ajaxBaseUrl'] = Mage::getUrl('oi/ajax/', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()));
         $config['productName'] = $this->getProduct()->getName();
         $config['description'] = $this->getProduct()->getDescription();
         $config['shortDescription'] = $this->getProduct()->getShortDescription();

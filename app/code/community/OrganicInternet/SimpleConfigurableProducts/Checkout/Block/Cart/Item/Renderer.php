@@ -4,9 +4,18 @@ class OrganicInternet_SimpleConfigurableProducts_Checkout_Block_Cart_Item_Render
 {
     protected function getConfigurableProductParentId()
     {
+        /*
         if ($this->getItem()->getOptionByCode('cpid')) {
             return $this->getItem()->getOptionByCode('cpid')->getValue();
         }
+        */
+
+        /* Fix by MG - idowaPRO */
+        $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')->getParentIdsByChild($this->getItem()->getProductId());
+        if($parentIds[0]) {
+            return $parentIds[0];
+        }
+
         return null;
     }
 

@@ -129,7 +129,9 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Resource_Eav_Mysq
             #'child_entity_id'
         ));
 
-        $query = $outerSelect->insertFromSelect($this->_getDefaultFinalPriceTable());
+        // $query = $outerSelect->insertFromSelect($this->_getDefaultFinalPriceTable());
+        $query = $outerSelect->insertFromSelect($this->_getDefaultFinalPriceTable(), array('entity_id','customer_group_id','website_id','tax_class_id','orig_price','price','min_price','max_price','tier_price','base_tier'));
+        
         $write->query($query);
         #Mage::log("SCP Price inner query: " . $select->__toString());
         #Mage::log("SCP Price outer query: " . $outerSelect->__toString());
