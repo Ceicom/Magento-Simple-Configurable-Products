@@ -45,9 +45,14 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
             return $product->getCalculatedFinalPrice();
         }
 */
-        $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice");
+        $childProduct = $this->_getProductFromSelectedAttributes($product);
+
         if (!$childProduct) {
-            $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice", false);
+            $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice");
+            
+            if (!$childProduct) {
+                $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice", false);
+            }    
         }
 
         if ($childProduct) {
@@ -69,12 +74,17 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
             return $price;
         }
 
-        $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice");
-        #If there aren't any salable child products we return the lowest price
-        #of all child products, including any ones not currently salable.
+        $childProduct = $this->_getProductFromSelectedAttributes($product);
+
         if (!$childProduct) {
-            $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice", false);
-        }
+            $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice");
+            
+            #If there aren't any salable child products we return the lowest price
+            #of all child products, including any ones not currently salable.
+            if (!$childProduct) {
+                $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice", false);
+            }
+        }        
 
         if ($childProduct) {
             return $childProduct->getPrice();
@@ -168,6 +178,21 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
             }
         }
         return $minProd;
+    }
+
+    protected function _getProductFromSelectedAttributes($product)
+    {
+        $selectedAttributes = array();
+        
+        if ($product->getCustomOption('attributes')) {
+            $selectedAttributes = unserialize($product->getCustomOption('attributes')->getValue());
+        }
+
+        if (count($selectedAttributes)) {
+            return $product->getTypeInstance(true)->getProductByAttributes($selectedAttributes, $product);
+        }
+
+        return false;
     }
 
     //Force tier pricing to be empty for configurable products:

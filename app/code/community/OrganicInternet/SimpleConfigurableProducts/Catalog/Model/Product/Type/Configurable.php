@@ -57,4 +57,43 @@
     }
 */
 
+    /**
+     * NOTE: Copied from Magento 1.9.2.0 and modified to include additional attributes to select
+     *
+     * Retrieve used product by attribute values
+     *  $attrbutesInfo = array(
+     *      $attributeId => $attributeValue
+     *  )
+     *
+     * @param  array $attributesInfo
+     * @param  Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product|null
+     */
+    public function getProductByAttributes($attributesInfo, $product = null)
+    {
+        if (is_array($attributesInfo) && !empty($attributesInfo)) {
+            $productCollection = $this->getUsedProductCollection($product)->addAttributeToSelect(array('name', 'price'));
+            foreach ($attributesInfo as $attributeId => $attributeValue) {
+                $productCollection->addAttributeToFilter($attributeId, $attributeValue);
+            }
+            $productObject = $productCollection->getFirstItem();
+            if ($productObject->getId()) {
+                return $productObject;
+            }
+
+            foreach ($this->getUsedProducts(null, $product) as $productObject) {
+                $checkRes = true;
+                foreach ($attributesInfo as $attributeId => $attributeValue) {
+                    $code = $this->getAttributeById($attributeId, $product)->getAttributeCode();
+                    if ($productObject->getData($code) != $attributeValue) {
+                        $checkRes = false;
+                    }
+                }
+                if ($checkRes) {
+                    return $productObject;
+                }
+            }
+        }
+        return null;
+    }
 }
