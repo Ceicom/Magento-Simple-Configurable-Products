@@ -20,11 +20,15 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Block_Product_View_Type
             if (Mage::getStoreConfig('SCP_options/product_page/change_name')) {
                 $childProducts[$productId]["productName"] = $product->getName();
             }
+            
             if (Mage::getStoreConfig('SCP_options/product_page/change_description')) {
-                $childProducts[$productId]["description"] = $product->getDescription();
+                $childProducts[$productId]["description"] = Mage::helper('catalog/output')
+                    ->productAttribute($product, $product->getDescription(), 'description');
             }
+            
             if (Mage::getStoreConfig('SCP_options/product_page/change_short_description')) {
-                $childProducts[$productId]["shortDescription"] = $product->getShortDescription();
+                $childProducts[$productId]["shortDescription"] = Mage::helper('catalog/output')
+                    ->productAttribute($product, $product->getShortDescription(), 'short_description');
             }
 
             if (Mage::getStoreConfig('SCP_options/product_page/change_attributes')) {
